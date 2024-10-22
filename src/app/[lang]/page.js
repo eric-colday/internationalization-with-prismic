@@ -3,12 +3,16 @@ import { SliceZone } from "@prismicio/react";
 
 import { createClient } from "@/prismicio";
 import { components } from "@/slices";
+import { getLocales } from "@/lib/getLocales";
 
-export default async function Page({ params }) {
+export default async function Page({ params: { lang } }) {
   const client = createClient();
   const page = await client
-    .getByUID("page", params.uid, { lang: locale })
+    .getByUID("page", "accueil", { lang })
     .catch(() => notFound());
+  // const navigation = await client.getSingle("navigation", { lang });
+  // const settings = await client.getSingle("settings", { lang });
+  const locales = await getLocales(page, client);
 
   return <SliceZone slices={page.data.slices} components={components} />;
 }
